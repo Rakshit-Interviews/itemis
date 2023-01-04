@@ -39,8 +39,12 @@ export class CartComponent implements OnInit {
         console.log(this.selectedItem)
     }
 
-    async ngOnInit() {
+    ngOnInit(): void {
         this.form = this.fb.group({ importCsv: ['', Validators.required] })
+        this.getAllItems()
+    }
+
+    async getAllItems() {
         try {
             let data = await firstValueFrom(this.uploadService.getAllItems())
             this.items = (data[0].data as Item[])
@@ -86,13 +90,13 @@ export class CartComponent implements OnInit {
 
         if (file) {
             await firstValueFrom(this.uploadService.uploadData(file))
+            setTimeout(()=> this.getAllItems(), 500)
         }
     }
 
     async uploadDataToDb() {
         const file = this.form.value["importCsv"]
         console.log(file)
-        await firstValueFrom(this.uploadService.uploadData(file))
     }
 
     getSalesTax() {
@@ -120,6 +124,6 @@ export class CartComponent implements OnInit {
     }
 
     getTotalPrice() {
-        return this.currentItems.map(t => t.totalPrice).reduce((acc, curr) => acc + curr, 0)
+        return (this.currentItems.map(t => t.totalPrice).reduce((acc, curr) => acc + curr, 0.0)).toFixed(2)
     }
 }
