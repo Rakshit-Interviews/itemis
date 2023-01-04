@@ -1,0 +1,45 @@
+version: "3.9"
+services:
+  angular:
+    container_name: angular-app
+    build: ./angular-cart
+    ports:
+      - 8090:8090
+    networks:
+      - myNetwork
+  
+  server:
+    container_name: server-docker
+    build: ./server
+    ports:
+      - 3000:3000
+    networks:
+      - myNetwork
+
+  nginx:
+    container_name: final-docker
+    restart: unless-stopped
+    build: .
+    ports:
+      - 80:80
+    networks:
+      - myNetwork
+    depends_on:
+      - server
+      - angular
+
+  mongo:
+    image: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: helloworld
+    networks:
+      - myNetwork
+    depends_on:
+      - server
+
+networks:
+  myNetwork:
+    external: false
+    name: myNetwork
+    

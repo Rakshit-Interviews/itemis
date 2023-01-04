@@ -1,0 +1,158 @@
+<section class="h-100 h-custom" style="background-color: #d2c9ff;">
+    <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-12">
+                <button class="btn btn-block">
+                    <h6 class="mb-0"><a class="text-body" (click)="openUploadModal()"><i class="fas fa-add me-2"></i>Bulk upload items</a></h6>
+                </button>
+                <div class="card card-registration card-registration-2" style="border-radius: 15px;">
+                    <div class="card-body p-0">
+                        <div class="row g-0">
+                            <div class="col-lg-8">
+                                <div class="p-5">
+                                    <div class="d-flex justify-content-between align-items-center mb-5">
+                                        <h1 class="fw-bold mb-0 text-black">Shopping Cart</h1>
+                                        <h6 class="mb-0"><a class="text-body" (click)="openModal()"><i
+                                            class="fas fa-add me-2"></i>Add item</a></h6>
+                                    </div>
+                                    <div *ngIf="currentItems.length == 0">Cart is empty</div>
+                                    <span *ngFor="let item of currentItems">
+                                    <hr class="my-4">
+
+                                    <div class="row mb-4 d-flex justify-content-between align-items-center">
+                                        <div class="col-md-2 col-lg-2 col-xl-2">
+                                            <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-shopping-carts/img5.webp"
+                                                class="img-fluid rounded-3" alt="Cotton T-shirt">
+                                        </div>
+                                        <div class="col-md-3 col-lg-3 col-xl-3">
+                                            <h6 class="text-muted">{{item.category}}</h6>
+                                            <h6 class="text-black mb-0">{{item.name}}</h6>
+                                        </div>
+                                        <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
+                                            
+
+                                            <input id="form1" min="0" name="quantity" (keyup)="getPrice(item.price, item.quantity)" [(ngModel)]="item.quantity" type="number"
+                                                class="form-control form-control-sm" />
+
+                                            
+                                        </div>
+                                        <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
+                                            <h6 class="mb-0">€ {{getPrice(item.price, item.quantity)}}</h6>
+                                        </div>
+                                        <div class="col-md-1 col-lg-1 col-xl-1 text-end">
+                                            <a href="#!" (click)="deleteItem(item)" class="text-muted"><i class="fas fa-times"></i></a>
+                                        </div>
+                                    </div>
+
+                                    <hr class="my-4">
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 bg-grey">
+                                <div class="p-5">
+                                    <h3 class="fw-bold mb-5 mt-2 pt-1">Summary</h3>
+                                    <hr class="my-4">
+                                    <h6 class="text-uppercase">Selected Items</h6>
+                                    <div class="d-flex justify-content-between mb-4" *ngFor="let item of currentItems">
+                                        <h6 class="text-black mb-0 col-md-6 col-lg-6 col-xl-6">{{item.name}}</h6>
+                                        <h6 class="text-muted col-md-2 col-lg-2 col-xl-2">{{item.category}}</h6>
+                                        <h6 class="text-black mb-0 col-md-2 col-lg-2 col-xl-2">€ {{item.totalPrice}}</h6>
+                                    
+                                    </div>
+                                    <hr class="my-4">
+                                    <div class="d-flex justify-content-between mb-4">
+                                        <h6 class="text-uppercase">Sales Taxes</h6>
+                                        <h6>€ {{getSalesTax()}}</h6>
+                                    </div>
+
+                                    <hr class="my-4">
+
+                                    <div class="d-flex justify-content-between mb-5">
+                                        <h5 class="text-uppercase">Total price</h5>
+                                        <h5>€ {{getTotalPrice()}}</h5>
+                                    </div>
+
+                                    <button type="button" class="btn btn-dark btn-block btn-lg"
+                                        data-mdb-ripple-color="dark">Checkout</button>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<ng-template #myModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Add Item</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        
+        <form>
+            <div class="form-outline">
+                <!-- <input type="text" id="form12" class="form-control" />
+                <label class="form-label" for="form12">Example label</label> -->
+                <select name="select-item" class="browser-default custom-select" [(ngModel)]="currentItem" (change)="updateItem()">
+                    <option class="form-control" selected disabled value="0">Select item from menu</option>
+                    <option class="form-control" [value]="item.id" *ngFor="let item of items">{{item.name}}</option>
+                  </select>
+            </div>
+            <br>
+            <div class="row mb-4 d-flex justify-content-between align-items-center" *ngIf="display">
+                <div class="col-md-2 col-lg-2 col-xl-2">
+                    <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-shopping-carts/img7.webp"
+                        class="img-fluid rounded-3" alt="Cotton T-shirt">
+                </div>
+                <div class="col-md-3 col-lg-3 col-xl-3">
+                    <h6 class="text-muted">{{selectedItem.category}}</h6>
+                    <h6 class="text-black mb-0">{{selectedItem.name}}</h6>
+                </div>
+                <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
+
+                    <input id="form1" min="0" name="quantity" [(ngModel)]="quantityForm" type="number"
+                        class="form-control form-control-sm" />
+
+                </div>
+                <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
+                    <h6 class="mb-0">€ {{getPrice(selectedItem.price, quantityForm)}}</h6>
+                </div>
+                <div class="col-md-1 col-lg-1 col-xl-1 text-end">
+                    <a class="text-muted"><i class="fas fa-times"></i></a>
+                </div>
+            </div>
+        </form>
+      
+      </div>
+      
+      <div class="modal-footer">
+        <button type="button" class="btn btn-dark btn-block" (click)="addItem(); modal.dismiss()">Save</button>
+      </div>
+</ng-template>
+
+<ng-template #bulkUpload let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Upload Items into Database</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        
+        <form [formGroup]="form">
+            <div class="form-outline">
+                <input type="file" name="file-upload" id="form12" class="form-control" formControlName="importCsv" [multiple]="false" accept="csv" (change)="onFileSelected($event)" />
+                <!-- <label class="form-label" for="form12">Upload Items</label> -->
+            </div>
+        </form>
+      
+      </div>
+      
+      <div class="modal-footer">
+        <button type="button" class="btn btn-dark btn-block" (click)="uploadDataToDb(); modal.dismiss()">Upload</button>
+      </div>
+</ng-template>
